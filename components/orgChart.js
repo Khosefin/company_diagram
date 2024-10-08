@@ -10,17 +10,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog.tsx";
 import NewItem from "@/components/NewItem";
 import Tools from "@/components/Tools";
-import { OrgChart } from "d3-org-chart";
 
-interface props {
-  chartRef: React.MutableRefObject<OrgChart<unknown>>;
-  data: d3.DSVRowArray<string> | null;
-}
-
-export const OrgChartComponent = (props: props) => {
+export const OrgChartComponent = (props) => {
   const d3Container = useRef(null);
   const [dragEnabled, setDragEnabled] = useState(false);
   const [isDragStarting, setIsDragStarting] = useState(false);
