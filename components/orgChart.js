@@ -335,6 +335,7 @@ export const OrgChartComponent = (props) => {
           }
         })
         .render();
+      props.chartRef.current.fit();
     }
   }, [props.data, d3Container.current]);
 
@@ -346,12 +347,6 @@ export const OrgChartComponent = (props) => {
       });
     } else unbindDragBehavior();
   }, [dragEnabled]);
-
-  useEffect(() => {
-    if (props.chartRef.current.fit()) {
-      props.chartRef.current.fit();
-    }
-  }, [props.chartRef]);
 
   function unbindDragBehavior() {
     const nodes = d3.selectAll("g.node");
