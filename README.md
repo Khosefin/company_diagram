@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## پیش نمایش پروژه
 
-## Getting Started
+![site Desktop preview :](./preview.JPG)
 
-First, run the development server:
+# نمایش ساختار سازمانی
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### **ویژگی‌ها**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* **نمایش سلسله مراتبی:** نمایش واضح ساختار سازمانی به صورت درختی
+* **قابلیت باز و بسته شدن زیرمجموعه‌ها:** امکان مشاهده جزئیات هر بخش به صورت جداگانه
+* **افزودن و حذف افراد:** حذف و ایجاد فرد جدید در ساختار سازمانی
+* **ابزارهای تعاملی:** امکان بزرگنمایی، کوچک‌نمایی، تنظیم اندازه صفحه و جستجوی افراد
+* **استفاده از فایل CSV برای دیتا و اطلاعات دیتابیس**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### **تکنولوژی‌های مورد استفاده**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* **Next.js:** فریمورک React برای ساخت وب‌اپلیکیشن‌های سمت سرور
+* **Tailwind CSS:** فریمورک CSS برای طراحی سریع و آسان رابط کاربری
+* **shadCN:** مجموعه کامپوننت‌های UI برای ایجاد رابط‌های کاربری مدرن
+* **D3.js:** کتابخانه جاوا اسکریپت برای ایجاد گراف‌ها و نمودارهای تعاملی
+* **TypeScript:** زبان برنامه‌نویسی برای تایپ‌چک کردن کد و افزایش قابلیت اطمینان
+* **zod:** کتابخانه اعتبارسنجی داده‌ها در TypeScript
+* **react-hook-form:** کتابخانه مدیریت فرم‌ها در React
 
-## Learn More
+### **نحوه کار**
 
-To learn more about Next.js, take a look at the following resources:
+1. **ایجاد دیاگرام:** کاربر با استفاده از رابط کاربری، نودهای جدید را اضافه کرده و روابط بین آن‌ها را تعریف می‌کند.
+2. **ویرایش دیاگرام:** کاربر می‌تواند ساختار دیاگرام را تغییر دهد و با استفاده از منو موجود در هر کارت به اضافه کردن زیرمجموعه یا حذف کاربر اقدام کند.
+3. **تعامل با دیاگرام:** کاربر می‌تواند با استفاده از ابزارهای تعاملی، دیاگرام را بزرگنمایی، کوچک‌نمایی و پیمایش کند.
+4. **جستجوی افراد:** کاربر می‌تواند با وارد کردن نام یا عنوان، افراد مورد نظر را در دیاگرام پیدا کند.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### **دستورالعمل‌های نصب و اجرا**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone Repository:**
+   ```bash
+   git clone https://github.com/Khosefin/company_diagram.git
+   ```
+2. **Install Dependencies:**
+   ```bash
+   cd your-repo
+   npm install
+   ```
+3. **Run:**
+   ```bash
+   npm run dev
+   ```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---

@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9138bc4b-246b-421d-9d6b-ad7c0f571afe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/components/orgChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/orgChart.js" afterDir="false" />
+    <list default="true" id="9138bc4b-246b-421d-9d6b-ad7c0f571afe" name="Changes" comment="bugfix(component): organization chart fit render">
+      <change afterPath="$PROJECT_DIR$/preview.JPG" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,11 +56,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Dospak\Desktop\rira_diagram" />
       <recent name="C:\Users\Dospak\Desktop\rira_diagram\csv" />
       <recent name="C:\Users\Dospak\Desktop\rira_diagram\app" />
       <recent name="C:\Users\Dospak\Desktop\rira_diagram\components" />
       <recent name="C:\Users\Dospak\Desktop\rira_diagram\Svgs" />
-      <recent name="C:\Users\Dospak\Desktop\rira_diagram" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -79,9 +81,22 @@
       <workItem from="1728323928961" duration="75455000" />
       <workItem from="1728458191905" duration="6740000" />
     </task>
+    <task id="LOCAL-00001" summary="bugfix(component): organization chart fit render">
+      <option name="closed" value="true" />
+      <created>1728466128687</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1728466128687</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="bugfix(component): organization chart fit render" />
+    <option name="LAST_COMMIT_MESSAGE" value="bugfix(component): organization chart fit render" />
   </component>
 </project>
