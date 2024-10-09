@@ -11,7 +11,11 @@ import { RxEnterFullScreen } from "react-icons/rx";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FaSearch } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { GrRedo, GrUndo } from "react-icons/gr";
+import { MdCancel } from "react-icons/md";
+import { IoSearch } from "react-icons/io5";
+import { toast } from "@/hooks/use-toast";
 
 interface ChartRef {
   zoomIn: () => void;
@@ -88,6 +92,10 @@ export default function Tools(props: ToolsProps) {
     });
 
     disableDrag();
+    toast({
+      title: "Drag canceled.",
+      description: "All changes returned to the initial state .",
+    });
     props.chartRef.current?.render();
   }
 
@@ -130,7 +138,7 @@ export default function Tools(props: ToolsProps) {
   }
 
   return (
-    <div className="absolute flex flex-col items-end text-end gap-5 top-7 right-7 text-sm">
+    <div className="absolute z-[200] grid grid-cols-4 items-end text-end gap-1 bottom-7 right-7 text-sm">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -138,10 +146,10 @@ export default function Tools(props: ToolsProps) {
               size={"icon"}
               onClick={() => props.chartRef.current?.zoomIn()}
             >
-              <FiZoomIn size={18} />
+              <FiZoomIn size={18} color={"black"} />
             </Button>
           </TooltipTrigger>
-          <TooltipContent side={"left"}>
+          <TooltipContent side={"top"}>
             <p>Zoom in</p>
           </TooltipContent>
         </Tooltip>
@@ -151,60 +159,89 @@ export default function Tools(props: ToolsProps) {
               size={"icon"}
               onClick={() => props.chartRef.current?.zoomOut()}
             >
-              <FiZoomOut size={18} />
+              <FiZoomOut size={18} color={"black"} />
             </Button>
           </TooltipTrigger>
-          <TooltipContent side={"left"}>
+          <TooltipContent side={"top"}>
             <p>Zoom Out</p>
           </TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button size={"icon"} onClick={handleRotate}>
-              <FaArrowRotateLeft size={18} />
+              <FaArrowRotateLeft size={18} color={"black"} />
             </Button>
           </TooltipTrigger>
-          <TooltipContent side={"left"}>
+          <TooltipContent side={"top"}>
             <p>Rotate</p>
           </TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button size={"icon"} onClick={() => props.chartRef.current?.fit()}>
-              <RxEnterFullScreen size={18} />
+              <RxEnterFullScreen size={18} color={"black"} />
             </Button>
           </TooltipTrigger>
-          <TooltipContent side={"left"}>
+          <TooltipContent side={"top"}>
             <p>Fit to the screen</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
       {props.dragEnabled ? (
-        <div className="flex gap-2">
-          <Button onClick={disableDrag}>Done</Button>
-          <Button disabled={props.undoActions.length <= 0} onClick={undo}>
-            Undo
+        <>
+          <Button
+            size="icon"
+            className="!bg-green-500"
+            onClick={() => {
+              disableDrag();
+              toast({
+                title: "Drag done.",
+                description: "All changes saved .",
+              });
+            }}
+          >
+            <FaCheck size={18} color={"white"} />
           </Button>
-          <Button disabled={props.redoActions.length <= 0} onClick={redo}>
-            Redo
+          <Button
+            size="icon"
+            disabled={props.undoActions.length <= 0}
+            onClick={undo}
+          >
+            <GrUndo size={18} color={"black"} />
           </Button>
-          <Button onClick={cancelDrag}>Cancel</Button>
-        </div>
+          <Button
+            size="icon"
+            disabled={props.redoActions.length <= 0}
+            onClick={redo}
+          >
+            <GrRedo size={18} color={"black"} />
+          </Button>
+          <Button size="icon" className="!bg-red-500" onClick={cancelDrag}>
+            <MdCancel size={18} color={"white"} />
+          </Button>
+        </>
       ) : (
-        <Button onClick={() => props.setDragEnabled(true)}>Organize</Button>
+        <Button
+          className={
+            "col-span-full !text-rose-400 border-2 border-rose-400 hover:!bg-rose-400 hover:!text-white"
+          }
+          onClick={() => props.setDragEnabled(true)}
+        >
+          Organize
+        </Button>
       )}
-      <div className="flex gap-2">
+      <div className="flex gap-2 col-span-full">
         <Label
           htmlFor="input"
-          className=" inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 w-9"
+          className=" inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-white text-black shadow hover:bg-primary/10 h-9 w-9"
         >
-          <FaSearch size={18} />
+          <IoSearch size={18} />
         </Label>
         <Input
           type="search"
           id="input"
-          placeholder="search by name"
-          className="bg-primary w-40 text-primary-foreground shadow hover:bg-primary/90 placeholder:text-white"
+          placeholder="Search ..."
+          className="w-32 shadow bg-white"
           onChange={(e) => filterChart(e.target.value)}
         />
       </div>

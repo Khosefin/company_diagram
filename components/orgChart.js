@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog.tsx";
 import NewItem from "@/components/NewItem";
 import Tools from "@/components/Tools";
+import { toast } from "@/hooks/use-toast";
 
 export const OrgChartComponent = (props) => {
   const d3Container = useRef(null);
@@ -24,7 +25,17 @@ export const OrgChartComponent = (props) => {
   const [redoActions, setRedoActions] = useState([]);
   let dragNode, dropNode, dragStartX, dragStartY;
 
-  function onDragStart(element, dragEvent, node) {
+  function onDragStart(element, dragEvent) {
+    const data = props.chartRef.current.getChartState().data;
+    const node = data?.find((x) => x.id === dragEvent.subject.id);
+    if (!node) {
+      toast({
+        variant: "destructive",
+        title: "You cant organize this item",
+        description: "please try other items.",
+      });
+      return;
+    }
     dragNode = node;
     const width = dragEvent.subject.width;
     const half = width / 2;
@@ -159,12 +170,12 @@ export const OrgChartComponent = (props) => {
     return `
       <div class="node-container node" 
   style="width:${d.width}px; height:${d.height}px; padding-top:${imageDiffVert - 2}px; padding-left:1px; padding-right:1px;">
-  <div class="content-container"
+  <div class="content-container relative"
     style="font-family: 'Inter', sans-serif; margin-left:-1px; width:${d.width - 2}px; height:${d.height - imageDiffVert}px;
       border-radius:10px; border:${d.data._highlighted || d.data._upToTheRootHighlighted ? "5px solid #E27396" : "1px solid #E4E2E9"}">
         <div class="flex justify-end mt-[5px] mr-2">
           <button type="button" id="remove-button" aria-expanded="true" aria-haspopup="true"
-            class="inline-flex justify-end rounded-md p-2 text-sm font-semibold text-gray-900 ${d.id === "100" ? "hidden" : "block"}">
+            class="inline-flex justify-end rounded-md p-2 text-sm font-semibold text-gray-900">
              <div class="svg-menu-button"/>
           </button>
           <div class="bin-button">
@@ -193,17 +204,19 @@ export const OrgChartComponent = (props) => {
           </div>
         </div>
     <div class="rounded-full w-12 h-12" style="margin-top:${-imageDiffVert - 20}px; margin-left:15px;"></div>
-    <div class="rounded-full w-10 h-10" style="margin-top:${-imageDiffVert - 20}px;">
-      <img src="${d.data.image}" class="rounded-full w-10 h-10" style="margin-left:20px;"/>
+    <div class="rounded-full w-12 h-12" style="margin-top:${-imageDiffVert - 20}px;">
+      <img src="${d.data.image}" class="rounded-full w-12 h-12" style="margin-left:20px;"/>
     </div>
     
-    <div class="text-base text-[#08011E] ml-5 mt-2">
+    <div class="!text-lg text-[#08011E] ml-5 mt-2">
       ${d.data.name}
     </div>
     
-    <div class="text-xs text-[#716E7B] ml-5 mt-1">
+    <div class="!text-xs text-[#716E7B] ml-5 mt-1">
       ${d.data.position}
     </div>
+    
+    <div class="!text-4xl font-bold text-slate-100 absolute bottom-3 right-1 -rotate-45">${d.data.id}</div>
   </div>
 </div>
 
@@ -221,13 +234,13 @@ export const OrgChartComponent = (props) => {
                    <div class="node-container "
                       style="width:${d.width}px; height:${d.height}px; padding-top:${imageDiffVert - 2}px; padding-left:1px; padding-right:1px;">
                       
-                      <div class="flex items-center justify-center text-center bg-white"
+                      <div class="flex items-center justify-center text-center"
                         style="font-family: 'Inter', sans-serif; margin-left:-1px; width:${d.width - 2}px; height:${d.height - imageDiffVert}px;
-                          border-radius:10px; border:${d.data._highlighted || d.data._upToTheRootHighlighted ? "5px solid #E27396" : "1px solid #E4E2E9"}"
+                          "
                         >
                         
-                        <div class="text-base text-[#08011E]">
-                          Show more ...
+                        <div class="text-lg font-bold text-zinc-500 w-full py-2 bg-white rounded-xl flex flex-col justify-center text-center items-center animate-bounce">
+                          <svg class="rotate-90" stroke="currentColor" fill="currentColor" stroke-width="0" version="1" viewBox="0 0 48 48" enable-background="new 0 0 48 48" height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"><polygon fill=" rgb(113 113 122)" points="17.1,5 14,8.1 29.9,24 14,39.9 17.1,43 36,24"></polygon></svg>
                         </div>
                       </div>
                     </div>
@@ -238,7 +251,7 @@ export const OrgChartComponent = (props) => {
         .onNodeClick(() => {
           console.log("e");
         })
-        .nodeHeight(() => 105 + 25)
+        .nodeHeight(() => 140)
         .nodeWidth(() => 250 + 2)
         .childrenMargin(() => 50)
         .compactMarginBetween(() => 35)
@@ -247,7 +260,7 @@ export const OrgChartComponent = (props) => {
         .linkUpdate(function (d) {
           d3.select(this)
             .attr("stroke", (d) =>
-              d.data._upToTheRootHighlighted ? "#ff8080" : "#c6c6c6",
+              d.data._upToTheRootHighlighted ? "#fb7185" : "#bdbdbd",
             )
             .attr("stroke-width", (d) =>
               d.data._upToTheRootHighlighted ? 2 : 1,
@@ -261,8 +274,7 @@ export const OrgChartComponent = (props) => {
           return generateContent(d);
         })
         .nodeEnter(function (node) {
-          const element = this;
-          updateDragBehavior(element, node);
+          updateDragBehavior(this, node);
         })
         .nodeUpdate(function (d) {
           d3.select(this)
@@ -270,16 +282,22 @@ export const OrgChartComponent = (props) => {
             .style(
               "border",
               d.data._highlighted || d.data._upToTheRootHighlighted
-                ? "solid #ff8080 2px"
+                ? "solid #fb7185 2px"
                 : "solid white 2px",
             );
           d3.select(this)
             .select("#remove-button")
             .on("click", () => {
-              d3.select(this)
-                .select(".bin-button")
-                .node()
-                .classList.toggle("show");
+              if (d.id !== "100") {
+                d3.select(this)
+                  .select(".bin-button")
+                  .node()
+                  .classList.toggle("show");
+                d3.select(this)
+                  .select(".info-button")
+                  .node()
+                  .classList.toggle("show");
+              }
               d3.select(this)
                 .select("#remove-button")
                 .node()
@@ -288,29 +306,27 @@ export const OrgChartComponent = (props) => {
                 .select(".add-button")
                 .node()
                 .classList.toggle("show");
-              d3.select(this)
-                .select(".info-button")
-                .node()
-                .classList.toggle("show");
-            });
-          d3.select(this)
-            .select(".bin-button")
-            .on("click", (e, d) => {
-              setAlertInfo(d.id);
             });
           d3.select(this)
             .select(".add-button")
             .on("click", (e, d) => {
               setOpenDialog(d.id);
             });
-          d3.select(this)
-            .select(".info-button")
-            .on("click", (e, d) => {
-              props.chartRef.current.setUpToTheRootHighlighted(d.id).render();
-              setTimeout(() => {
-                props.chartRef.current.clearHighlighting();
-              }, [1500]);
-            });
+          if (d.id !== "100") {
+            d3.select(this)
+              .select(".bin-button")
+              .on("click", (e, d) => {
+                setAlertInfo(d.id);
+              });
+            d3.select(this)
+              .select(".info-button")
+              .on("click", (e, d) => {
+                props.chartRef.current.setUpToTheRootHighlighted(d.id).render();
+                setTimeout(() => {
+                  props.chartRef.current.clearHighlighting();
+                }, [1500]);
+              });
+          }
           d3.select(this).classed("droppable", true);
           if (d.id === "100") {
             d3.select(this).classed("draggable", false);
@@ -331,6 +347,12 @@ export const OrgChartComponent = (props) => {
     } else unbindDragBehavior();
   }, [dragEnabled]);
 
+  useEffect(() => {
+    if (props.chartRef.current.fit()) {
+      props.chartRef.current.fit();
+    }
+  }, [props.chartRef]);
+
   function unbindDragBehavior() {
     const nodes = d3.selectAll("g.node");
     nodes.each(function () {
@@ -339,22 +361,24 @@ export const OrgChartComponent = (props) => {
   }
 
   function updateDragBehavior(element) {
-    d3.select(element).call(
-      d3
-        .drag()
-        .filter(function () {
-          return dragEnabled && this.classList.contains("draggable");
-        })
-        .on("start", function (d, node) {
-          onDragStart(this, d, node);
-        })
-        .on("drag", function (dragEvent) {
-          onDrag(this, dragEvent);
-        })
-        .on("end", function (d) {
-          onDragEnd(this, d);
-        }),
-    );
+    if (dragEnabled && d3.select(element).classed("draggable")) {
+      d3.select(element).call(
+        d3
+          .drag()
+          .filter(function () {
+            return dragEnabled && this.classList.contains("draggable");
+          })
+          .on("start", function (d, node) {
+            onDragStart(this, d, node);
+          })
+          .on("drag", function (dragEvent) {
+            onDrag(this, dragEvent);
+          })
+          .on("end", function (d) {
+            onDragEnd(this, d);
+          }),
+      );
+    }
   }
 
   return (
@@ -382,9 +406,13 @@ export const OrgChartComponent = (props) => {
                 Cancel
               </AlertDialogCancel>
               <AlertDialogAction
+                className={"!bg-rose-400"}
                 onClick={() => {
                   props.chartRef.current.removeNode(alertInfo).render();
                   setAlertInfo(null);
+                  toast({
+                    title: "item removed successfully",
+                  });
                 }}
               >
                 Accept
